@@ -11,27 +11,11 @@
   -->
   <Fragment>
     <DirectoryRef Id="TARGETDIR">
-      <Directory Id="CommonAppDataFolder" Name="CommonAppData">
-        <Directory Id="APPDATADIR" Name="PuppetLabs">
-          <Directory Id="pxpAgentDataFolder" Name="pxp-agent">
-            <Directory Id="pxpAgentDataFolderVar" Name="var">
-              <Directory Id="pxpAgentDataFolderLog" Name="log" />
-              <Directory Id="pxpAgentDataFolderRun" Name="run" />
-              <Directory Id="pxpAgentDataFolderSpool" Name="spool" />
-            </Directory>
-            <Directory Id="pxpAgentDataFolderEtc" Name="etc">
-              <Directory Id="pxpAgentDataFolderModules" Name="modules"/>
-            </Directory>
-          </Directory>
+      <Directory Id="APPDATADIR" Name="PuppetForager">
+        <Directory Id="ApplicationBlahBlahBlah" Name="Forager">
           <Directory Id="PuppetAppData" Name="puppet">
             <Directory Id="PuppetConfDir" Name="etc"/>
             <Directory Id="PuppetVarDir" Name="var"/>
-          </Directory>
-          <Directory Id="MCOAppData" Name="mcollective">
-            <Directory Id="MCOConfDir" Name="etc"/>
-            <Directory Id="MCOVarDir" Name="var">
-              <Directory Id="MCOLogDir" Name="log"/>
-            </Directory>
           </Directory>
           <Directory Id="FacterAppData" Name="facter">
             <Directory Id="FactsDotD" Name="facts.d"/>
@@ -50,45 +34,13 @@
       </Directory>
     </DirectoryRef>
     <ComponentGroup Id="AppDataComponentGroup" >
-      <Component
-        Id="PXPAgentLogDir"
-        Guid="DF0D0E2A-F069-4933-8AE9-5E779C8E93B9"
-        Permanent="yes"
-        Directory="pxpAgentDataFolderLog" >
-        <CreateFolder/>
-      </Component>
-      <Component
-        Id="PXPAgentRunDir"
-        Guid="4AD77345-D8AE-40E4-B41C-706EC51FE63F"
-        Permanent="yes"
-        Directory="pxpAgentDataFolderRun" >
-        <CreateFolder/>
-      </Component>
-      <Component
-        Id="PXPAgentSpoolDir"
-        Guid="F265A518-A7B7-4FA8-85D8-7306A10E1659"
-        Permanent="yes"
-        Directory="pxpAgentDataFolderSpool" >
-        <CreateFolder/>
-      </Component>
-      <Component
-        Id="PXPAgentModulesDir"
-        Guid="EC0FC78E-CCC5-42EB-AF09-378274AC7530"
-        Permanent="yes"
-        Directory="pxpAgentDataFolderModules" >
-        <CreateFolder/>
-      </Component>
       <!-- This is a permanent directory, do not remove on uninstall -->
       <Component
         Id="PuppetConfUnconditionalSettings"
-        Permanent="yes"
+        Permanent="no"
         Guid="B9179A60-483F-4F32-8E3F-AD632B0DEBB4"
         Directory="PuppetConfDir">
         <CreateFolder />
-        <File
-          Id="HieraConf"
-          KeyPath="yes"
-          Source="SourceDir\CommonAppDataFolder\Puppetlabs\puppet\etc\hiera.yaml" />
         <IniFile
           Id="PuppetConfServer" Name="puppet.conf"
           Action="addLine"
@@ -110,7 +62,7 @@
       </Component>
       <Component
         Id="PuppetConfWithAgentEnvironment"
-        Permanent="yes"
+        Permanent="no"
         Guid="EC56FB39-A176-42BA-BB1C-10C8DE76AE67"
         Directory="PuppetConfDir">
         <Condition>PUPPET_AGENT_ENVIRONMENT</Condition>
@@ -144,7 +96,7 @@
       </Component>
       <Component
         Id="PuppetConfWithCaServer"
-        Permanent="yes"
+        Permanent="no"
         Guid="CE676CF1-2E12-4CDC-B87F-D4BC4E71FF85"
         Directory="PuppetConfDir">
         <Condition>PUPPET_CA_SERVER</Condition>
@@ -160,28 +112,14 @@
       </Component>
       <Component
         Id="PuppetVarDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="B95A17F3-CF5E-4EC7-859E-F10C0965645F"
         Directory="PuppetVarDir">
         <CreateFolder />
       </Component>
       <Component
-        Id="MCOConfDir"
-        Permanent="yes"
-        Guid="3E904914-17C7-138C-F5DF-280F680E067C"
-        Directory="MCOConfDir">
-        <CreateFolder />
-      </Component>
-      <Component
-        Id="MCOLogDir"
-        Permanent="yes"
-        Guid="F9357673-2AF2-90FA-8707-14EE37FA0657"
-        Directory="MCOLogDir">
-        <CreateFolder />
-      </Component>
-      <Component
         Id="PuppetInstallerFacts"
-        Permanent="yes"
+        Permanent="no"
         Guid="4E7C234B-2837-4459-A20E-9503A922FCB9"
         Directory="FactsDotD">
         <CreateFolder>
@@ -191,53 +129,49 @@
       </Component>
       <Component
         Id="CodeDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="0D29EB1B-604D-4FE1-A75C-F18CC230BEED"
         Directory="CodeDir">
         <CreateFolder />
       </Component>
       <Component
         Id="HieraDataDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="2438387C-BEA5-47C1-8B43-46FE30E14BEA"
         Directory="HieraDataDir">
         <CreateFolder />
       </Component>
       <Component
         Id="CodeModulesDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="ae4a85a4-a305-4c95-b254-c2f06c586482"
         Directory="CodeModulesDir">
         <CreateFolder />
       </Component>
       <Component
         Id="EnvironmentsDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="6a6a390a-8783-40b6-b49d-9e2b368e069d"
         Directory="EnvironmentsDir">
         <CreateFolder />
       </Component>
       <Component
         Id="ProductionDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="b902efcd-756e-4340-8f13-5a79d46b93c7"
         Directory="ProductionDir">
         <CreateFolder />
-        <File
-          Id="EnvironmentConf"
-          KeyPath="yes"
-          Source="SourceDir\CommonAppDataFolder\PuppetLabs\code\environments\production\environment.conf" />
       </Component>
       <Component
         Id="ManifestsDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="5484fadf-6d5e-4053-83fc-ea68918d6f2e"
         Directory="ManifestsDir">
         <CreateFolder />
       </Component>
       <Component
         Id="ModulesDir"
-        Permanent="yes"
+        Permanent="no"
         Guid="cbe9cc8d-3a38-4c4c-9f16-39e42093481a"
         Directory="ModulesDir">
         <CreateFolder />

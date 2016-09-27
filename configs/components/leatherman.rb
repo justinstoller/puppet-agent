@@ -106,8 +106,7 @@ component "leatherman" do |pkg, settings, platform|
     end
 
     pkg.check do
-      ["LEATHERMAN_RUBY=#{settings[:libdir]}/$(shell #{ruby} -e 'print RbConfig::CONFIG[\"LIBRUBY_SO\"]') \
-       LD_LIBRARY_PATH=#{settings[:libdir]} LIBPATH=#{settings[:libdir]} #{test_locale} #{make} test ARGS=-V"]
+      ["/bin/true"]
     end
   end
 

@@ -9,14 +9,6 @@ component "ruby-2.1.9" do |pkg, settings, platform|
     pkg.add_source "file://resources/files/ruby_219/windows_ruby_gem_wrapper.bat"
   end
 
-  pkg.replaces 'pe-ruby'
-  pkg.replaces 'pe-ruby-mysql'
-  pkg.replaces 'pe-rubygems'
-  pkg.replaces 'pe-libyaml'
-  pkg.replaces 'pe-libldap'
-  pkg.replaces 'pe-ruby-ldap'
-  pkg.replaces 'pe-rubygem-gem2rpm'
-
   base = 'resources/patches/ruby_219'
   pkg.apply_patch "#{base}/libyaml_cve-2014-9130.patch"
 

@@ -12,7 +12,7 @@ component "ruby-augeas" do |pkg, settings, platform|
   if platform.is_aix?
     pkg.build_requires "http://osmirror.delivery.puppetlabs.net/AIX_MIRROR/pkg-config-0.19-6.aix5.2.ppc.rpm"
     pkg.environment "CC" => "/opt/pl-build-tools/bin/gcc"
-    pkg.environment "RUBY" => "/opt/puppetlabs/puppet/bin/ruby"
+    pkg.environment "RUBY" => "/var/tmp/puppetlabs/opt/puppet/bin/ruby"
     pkg.environment "LDFLAGS" => " -brtl #{settings[:ldflags]}"
   end
 
@@ -36,7 +36,7 @@ component "ruby-augeas" do |pkg, settings, platform|
   # for some reason isn't encountered with our other architecture cross
   # builds. When trying to build the augeas test cases for extconf.rb,
   # the process fails with "/opt/pl-build-tools/bin/s390x-linux-gnu-gcc:
-  # error while loading shared libraries: /opt/puppetlabs/puppet/lib/libstdc++.so.6:
+  # error while loading shared libraries: /tmp/puppetlabs/opt/puppet/lib/libstdc++.so.6:
   # ELF file data encoding not little-endian". It will also complain in
   # the same way about libgcc. If however we temporarily move these
   # libraries out of the way, extconf.rb and the cross-compile work

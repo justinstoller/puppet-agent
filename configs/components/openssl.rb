@@ -3,7 +3,6 @@ component "openssl" do |pkg, settings, platform|
   pkg.md5sum "96322138f0b69e61b7212bc53d5e912b"
   pkg.url "https://openssl.org/source/openssl-#{pkg.get_version}.tar.gz"
 
-  pkg.replaces 'pe-openssl'
 
   # Use our toolchain on linux systems (it's not available on osx)
   if platform.is_cross_compiled_linux?

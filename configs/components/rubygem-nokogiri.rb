@@ -40,7 +40,7 @@ component "rubygem-nokogiri" do |pkg, settings, platform|
     # against our vendored libxml2 and libxslt
     pkg.install do
       [
-        "#{settings[:gem_install]} nokogiri-#{pkg.get_version}.gem -- --use-system-libraries --with-xml2-lib=/opt/puppetlabs/puppet/lib --with-xml2-include=/opt/puppetlabs/puppet/include/libxml2 --with-xslt-lib=/opt/puppetlabs/puppet/lib --with-xslt-include=/opt/puppetlabs/puppet/include/libxslt"
+        "#{settings[:gem_install]} nokogiri-#{pkg.get_version}.gem -- --use-system-libraries --with-xml2-lib=/var/tmp/puppetlabs/opt/puppet/lib --with-xml2-include=/var/tmp/puppetlabs/opt/puppet/include/libxml2 --with-xslt-lib=/var/tmp/puppetlabs/opt/puppet/lib --with-xslt-include=/var/tmp/puppetlabs/opt/puppet/include/libxslt"
       ]
     end
   end

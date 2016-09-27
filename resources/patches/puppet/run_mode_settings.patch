@@ -1,0 +1,65 @@
+From ad677b1f409197a711fbc25992228e275e47694c Mon Sep 17 00:00:00 2001
+From: Justin Stoller <justin.stoller@gmail.com>
+Date: Thu, 9 Feb 2017 16:48:12 -0800
+Subject: [PATCH] (maint) Set defaults locations to where forager builds
+
+---
+ lib/puppet/util/run_mode.rb | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/lib/puppet/util/run_mode.rb b/lib/puppet/util/run_mode.rb
+index cf6c4613a..f541570cc 100644
+--- a/lib/puppet/util/run_mode.rb
++++ b/lib/puppet/util/run_mode.rb
+@@ -49,33 +49,29 @@ module Puppet
+       # @todo this code duplicates {Puppet::Settings#which\_configuration\_file}
+       #   as described in {https://projects.puppetlabs.com/issues/16637 #16637}
+       def which_dir( system, user )
+-        if Puppet.features.root?
+-          File.expand_path(system)
+-        else
+-          File.expand_path(user)
+-        end
++        File.expand_path(system)
+       end
+     end
+ 
+     class UnixRunMode < RunMode
+       def conf_dir
+-        which_dir("/etc/puppetlabs/puppet", "~/.puppetlabs/etc/puppet")
++        which_dir("/var/tmp/puppetlabs/etc/puppetlabs/puppet", "~/.puppetlabs/etc/puppet")
+       end
+ 
+       def code_dir
+-        which_dir("/etc/puppetlabs/code", "~/.puppetlabs/etc/code")
++        which_dir("/var/tmp/puppetlabs/etc/puppetlabs/code", "~/.puppetlabs/etc/code")
+       end
+ 
+       def var_dir
+-        which_dir("/opt/puppetlabs/puppet/cache", "~/.puppetlabs/opt/puppet/cache")
++        which_dir("/var/tmp/puppetlabs/opt/puppetlabs/puppet/cache", "~/.puppetlabs/opt/puppet/cache")
+       end
+ 
+       def run_dir
+-        which_dir("/var/run/puppetlabs", "~/.puppetlabs/var/run")
++        which_dir("/var/tmp/puppetlabs/var/run/puppetlabs", "~/.puppetlabs/var/run")
+       end
+ 
+       def log_dir
+-        which_dir("/var/log/puppetlabs/puppet", "~/.puppetlabs/var/log")
++        which_dir("/var/tmp/puppetlabs/var/log/puppetlabs/puppet", "~/.puppetlabs/var/log")
+       end
+     end
+ 
+@@ -103,7 +99,7 @@ module Puppet
+     private
+ 
+       def windows_common_base(*extra)
+-        [Dir::COMMON_APPDATA, "PuppetLabs"] + extra
++        ["puppetlabs", "PuppetForager", "Forager"] + extra
+       end
+     end
+   end
+-- 
+2.11.0
+

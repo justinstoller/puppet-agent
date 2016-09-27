@@ -8,11 +8,6 @@
       <!-- We can add all components by referencing this one thing -->
       <ComponentGroupRef Id="AppComponentGroup" />
       <ComponentGroupRef Id="AppDataComponentGroup" />
-      <ComponentGroupRef Id="RegistryComponentGroup" />
-      <ComponentGroupRef Id="ShortCutsComponentGroup" />
-      <%- get_services.each do |service| -%>
-      <ComponentGroupRef Id="<%= service.component_group_id %>" />
-      <%- end -%>
       <!-- All of these Include refs are expected to be present -->
       <ComponentGroupRef Id="FragmentProperties" />
       <ComponentGroupRef Id="FragmentSequences" />
@@ -22,7 +17,6 @@
       <ComponentGroupRef Id="FragmentVariables" />
       <ComponentGroupRef Id="FragmentCondition" />
       <!-- Ensure User Account Component is loaded -->
-      <ComponentRef Id="PuppetServiceUser" />
     </ComponentGroup>
 
     <UI>

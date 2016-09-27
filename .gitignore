@@ -1,5 +1,4 @@
 vendor/*
-output/*
 .bundle
 Gemfile.lock
 Gemfile.local

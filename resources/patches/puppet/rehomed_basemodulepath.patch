@@ -1,0 +1,13 @@
+diff --git a/lib/puppet/defaults.rb b/lib/puppet/defaults.rb
+index 461ab4c1e..2d52499d2 100644
+--- a/lib/puppet/defaults.rb
++++ b/lib/puppet/defaults.rb
+@@ -1207,7 +1207,7 @@ EOT
+       :desc       => "File that provides mapping between custom SSL oids and user-friendly names"
+     },
+     :basemodulepath => {
+-      :default => "$codedir/modules#{File::PATH_SEPARATOR}/opt/puppetlabs/puppet/modules",
++      :default => "$codedir/modules#{File::PATH_SEPARATOR}" + (Puppet.features.microsoft_windows? ? "/Program Files/Puppet Forager/Forager/puppet/modules" : "/var/tmp/puppetlabs/opt/puppet/modules"),
+       :type => :path,
+       :desc => "The search path for **global** modules. Should be specified as a
+         list of directories separated by the system path separator character. (The

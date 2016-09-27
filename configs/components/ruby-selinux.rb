@@ -11,8 +11,6 @@ component "ruby-selinux" do |pkg, settings, platform|
     pkg.url "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20100525/devel/libselinux-#{pkg.get_version}.tar.gz"
   end
 
-  pkg.replaces 'pe-ruby-selinux'
-
   pkg.build_requires "ruby-#{settings[:ruby_version]}"
   pkg.build_requires "swig"
   pkg.build_requires "libsepol"

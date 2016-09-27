@@ -1,3 +1,33 @@
+Hafjell Forager Agent
+=====================
+This is simply a puppet-agent package that will install into /tmp on Linux.
+It is merely meant as a research spike on what we can - and cannot - do for
+enabling unmanaged resource gathering (foraging).
+
+The general puppet-agent build process works the same here though there is
+a custom project. Consequently instead of running
+```
+bundle exec build puppet-agent el-7-x86_64
+```
+
+You should run:
+```
+bundle exec build forager el-7-x86_64
+```
+
+For those unfamiliar with vanagon projects the details on how to build the
+"forager" project is contained within the file "configs/projects/forager.rb"
+and the platform given as the second argument maps to a file in
+"configs/platforms/<platform-argument>.rb".
+
+The packages in the "packages" directory within the hafjell-forager-prototyping
+project are renamed versions of the equivalent files in the "output" directory
+of this repo.
+
+
+
+
+
 The Puppet Agent
 ===
  * Overview

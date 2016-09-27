@@ -50,7 +50,7 @@ component "marionette-collective" do |pkg, settings, platform|
   end
 
   if (platform.servicetype == "sysv" && platform.is_rpm?) || platform.is_aix?
-    puppet_bin = "/opt/puppetlabs/bin/puppet"
+    puppet_bin = "/var/tmp/puppetlabs/opt/bin/puppet"
     rpm_statedir = "%{_localstatedir}/lib/rpm-state/#{pkg.get_name}"
     service_statefile = "#{rpm_statedir}/service.pp"
     pkg.add_preinstall_action ["upgrade"],

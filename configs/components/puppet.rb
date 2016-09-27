@@ -3,88 +3,14 @@ component "puppet" do |pkg, settings, platform|
 
   pkg.build_requires "ruby-#{settings[:ruby_version]}"
   pkg.build_requires "facter"
-  pkg.build_requires "hiera"
+  #pkg.build_requires "hiera"
 
-  pkg.replaces 'puppet', '4.0.0'
-  pkg.provides 'puppet', '4.0.0'
+  pkg.replaces 'forage-puppet', '4.0.0'
+  pkg.provides 'forage-puppet', '4.0.0'
 
-  pkg.replaces 'pe-puppet'
-  pkg.replaces 'pe-ruby-rgen'
-  pkg.replaces 'pe-cloud-provisioner-libs'
-  pkg.replaces 'pe-cloud-provisioner'
-  pkg.replaces 'pe-puppet-enterprise-release', '4.0.0'
-  pkg.replaces 'pe-agent'
-  pkg.replaces 'pe-puppetserver-common', '4.0.0'
-
-  if platform.is_deb?
-    pkg.replaces 'puppet-common', '4.0.0'
-    pkg.provides 'puppet-common', '4.0.0'
-  end
-
-  case platform.servicetype
-  when "systemd"
-    pkg.install_service "ext/systemd/puppet.service", "ext/redhat/client.sysconfig"
-  when "sysv"
-    if platform.is_deb?
-      pkg.install_service "ext/debian/puppet.init", "ext/debian/puppet.default"
-    elsif platform.is_sles?
-      pkg.install_service "ext/suse/client.init", "ext/redhat/client.sysconfig"
-    elsif platform.is_rpm?
-      pkg.install_service "ext/redhat/client.init", "ext/redhat/client.sysconfig"
-    end
-  when "launchd"
-    pkg.install_service "ext/osx/puppet.plist", nil, "com.puppetlabs.puppet"
-  when "smf"
-    pkg.install_service "ext/solaris/smf/puppet.xml", "ext/solaris/smf/puppet", service_type: "network"
-  when "aix"
-    pkg.install_service "resources/aix/puppet.service", nil, "puppet"
-  when "windows"
-    # Note - this definition indicates that the file should be filtered out from the Wix
-    # harvest. A corresponding service definition file is also required in resources/windows/wix
-    pkg.install_service "SourceDir\\#{settings[:base_dir]}\\#{settings[:company_id]}\\#{settings[:product_id]}\\sys\\ruby\\bin\\ruby.exe"
-  else
-    fail "need to know where to put service files"
-  end
-
-  if (platform.servicetype == "sysv" && platform.is_rpm?) || platform.is_aix?
-    puppet_bin = "/opt/puppetlabs/bin/puppet"
-    rpm_statedir = "%{_localstatedir}/lib/rpm-state/#{pkg.get_name}"
-    service_statefile = "#{rpm_statedir}/service.pp"
-    pkg.add_preinstall_action ["upgrade"],
-      [<<-HERE.undent
-        mkdir -p  #{rpm_statedir} && chown root #{rpm_statedir} && chmod 0700 #{rpm_statedir} || :
-        if [ -x #{puppet_bin} ] ; then
-          #{puppet_bin} resource service puppet > #{service_statefile} || :
-        fi
-        HERE
-      ]
-
-    pkg.add_postinstall_action ["upgrade"],
-      [<<-HERE.undent
-        if [ -f #{service_statefile} ] ; then
-          #{puppet_bin} apply #{service_statefile} > /dev/null 2>&1 || :
-          rm -rf #{rpm_statedir} || :
-        fi
-        HERE
-      ]
-  end
-
-  # To create a tmpfs directory for the piddir, it seems like it's either this
-  # or a PR against Puppet until that sort of support can be rolled into the
-  # Vanagon tooling directly. It's totally a hack, and I'm not proud of this
-  # in any meaningful way.
-  # - Ryan "I'm sorry. I'm so sorry." McKern, June 8 2015
-  # - Jira # RE-3954
-  if platform.servicetype == 'systemd'
-    pkg.build do
-      "echo 'd #{settings[:piddir]} 0755 root root -' > puppet-agent.conf"
-    end
-
-    # Also part of the ugly, ugly, ugly, sad, tragic hack.
-    # - Ryan "Rub some HEREDOC on it" McKern, June 8 2015
-    # - Jira # RE-3954
-    pkg.install_configfile 'puppet-agent.conf', File.join(settings[:tmpfilesdir], 'puppet-agent.conf')
-  end
+  pkg.apply_patch 'resources/patches/puppet/run_mode_settings.patch'
+  pkg.apply_patch 'resources/patches/puppet/rehomed_basemodulepath.patch'
+  pkg.apply_patch 'resources/patches/puppet/remove_hiera_dep.patch'
 
   # Puppet requires tar, otherwise PMT will not install modules
   if platform.is_solaris?
@@ -95,11 +21,6 @@ component "puppet" do |pkg, settings, platform|
     # PMT doesn't work on AIX, don't add a useless dependency
     # We will need to revisit when we update PMT support
     pkg.requires 'tar' unless platform.is_aix?
-  end
-
-  if platform.is_osx?
-    pkg.add_source("file://resources/files/osx_paths.txt", sum: "077ceb5e2f71cf733190a61d2fd221fb")
-    pkg.install_file("../osx_paths.txt", "/etc/paths.d/puppet-agent")
   end
 
   if platform.is_windows?
@@ -137,26 +58,23 @@ component "puppet" do |pkg, settings, platform|
         --quick \
         --no-batch-files \
         --man \
-        --mandir=#{settings[:mandir]}",]
+        --mandir=#{settings[:mandir]}",
+    ]
+  end
+
+  if !platform.is_windows?
+    pkg.install do
+      ["#{settings[:bindir]}/puppet module install puppetlabs-inventory --modulepath '/var/tmp/puppetlabs/opt/puppet/modules'"]
+    end
   end
 
   if platform.is_windows?
     pkg.install do
-      ["/usr/bin/cp #{settings[:prefix]}/VERSION #{settings[:install_root]}",]
+      ["/usr/bin/tar -xvf ../inventory.tar",
+       "/usr/bin/cp -R inventory #{settings[:prefix]}/modules/",
+       "/usr/bin/cp #{settings[:prefix]}/VERSION #{settings[:install_root]}"]
     end
   end
-
-  #The following will add the vim syntax files for puppet
-  #in the /opt/puppetlabs/puppet/share/vim directory
-  pkg.add_source "file://resources/files/ftdetect/ftdetect_puppet.vim", sum: "9e93cd63787de6b9ed458c95061f06eb"
-  pkg.add_source "file://resources/files/ftplugin/ftplugin_puppet.vim", sum: "0fde61360edf2bb205947f768bfb2d57"
-  pkg.add_source "file://resources/files/indent/indent_puppet.vim", sum: "4bc2dee4c9c4e74aa3103339ad3ab227"
-  pkg.add_source "file://resources/files/syntax/syntax_puppet.vim", sum: "3ef904628c734af25fe673638c4e0b3d"
-
-  pkg.install_configfile("../ftdetect_puppet.vim", "#{settings[:datadir]}/vim/puppet-vimfiles/ftdetect/puppet.vim")
-  pkg.install_configfile("../ftplugin_puppet.vim", "#{settings[:datadir]}/vim/puppet-vimfiles/ftplugin/puppet.vim")
-  pkg.install_configfile("../indent_puppet.vim", "#{settings[:datadir]}/vim/puppet-vimfiles/indent/puppet.vim")
-  pkg.install_configfile("../syntax_puppet.vim", "#{settings[:datadir]}/vim/puppet-vimfiles/syntax/puppet.vim")
 
   pkg.install_file ".gemspec", "#{settings[:gem_home]}/specifications/#{pkg.get_name}.gemspec"
 
@@ -167,6 +85,7 @@ component "puppet" do |pkg, settings, platform|
     pkg.add_source("file://resources/files/windows/puppet_interactive.bat", sum: "4b40eb0df91d2ca8209302062c4940c4")
     pkg.add_source("file://resources/files/windows/puppet_shell.bat", sum: "24477c6d2c0e7eec9899fb928204f1a0")
     pkg.add_source("file://resources/files/windows/run_puppet_interactive.bat", sum: "d4ae359425067336e97e4e3a200027d5")
+    pkg.add_source("file://resources/files/inventory.tar")
     pkg.install_file "../environment.bat", "#{settings[:link_bindir]}/environment.bat"
     pkg.install_file "../puppet.bat", "#{settings[:link_bindir]}/puppet.bat"
     pkg.install_file "../puppet_interactive.bat", "#{settings[:link_bindir]}/puppet_interactive.bat"
@@ -201,7 +120,6 @@ component "puppet" do |pkg, settings, platform|
     pkg.directory File.join(settings[:logdir], 'puppet'), mode: "0750"
   end
 
-  pkg.link "#{settings[:bindir]}/puppet", "#{settings[:link_bindir]}/puppet" unless platform.is_windows?
   if platform.is_eos?
     pkg.link "#{settings[:sysconfdir]}", "#{settings[:link_sysconfdir]}"
   end

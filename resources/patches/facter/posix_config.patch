@@ -1,0 +1,12 @@
+diff --git a/lib/src/util/config/posix/config.cc b/lib/src/util/config/posix/config.cc
+index 0e9e2d88..6b134022 100644
+--- a/lib/src/util/config/posix/config.cc
++++ b/lib/src/util/config/posix/config.cc
+@@ -7,6 +7,6 @@ namespace facter { namespace util { namespace config {
+     }
+ 
+     std::string default_config_location() {
+-        return "/etc/puppetlabs/facter/facter.conf";
++        return "/var/tmp/puppetlabs/opt/facter/facter.conf";
+     }
+ }}}  // namespace facter::util::config

@@ -1,18 +1,10 @@
 component "facter" do |pkg, settings, platform|
   pkg.load_from_json('configs/components/facter.json')
 
-  if platform.is_rpm?
-    # In our rpm packages, facter has an epoch set, so we need to account for that here
-    pkg.replaces 'facter', '1:3.0.0'
-    pkg.provides 'facter', '1:3.0.0'
-  else
-    pkg.replaces 'facter', '3.0.0'
-    pkg.provides 'facter', '3.0.0'
-  end
-  pkg.replaces 'cfacter', '0.5.0'
-  pkg.provides 'cfacter', '0.5.0'
+  pkg.replaces 'forage-facter', '1.0.0'
+  pkg.provides 'forage-facter', '1.0.0'
 
-  pkg.replaces 'pe-facter'
+  pkg.apply_patch 'resources/patches/facter/posix_config.patch'
 
   pkg.build_requires "ruby-#{settings[:ruby_version]}"
   pkg.build_requires 'openssl'
@@ -26,7 +18,7 @@ component "facter" do |pkg, settings, platform|
   end
 
   # Running facter (as part of testing) expects augtool are available
-  pkg.build_requires 'augeas' unless platform.is_windows?
+  #pkg.build_requires 'augeas' unless platform.is_windows?
   pkg.build_requires "openssl"
 
   if platform.is_windows?
@@ -237,7 +229,7 @@ component "facter" do |pkg, settings, platform|
   end
 
   pkg.check do
-    tests
+    ["/bin/true"]
   end
 
   pkg.install_file ".gemspec", "#{settings[:gem_home]}/specifications/#{pkg.get_name}.gemspec"
@@ -250,9 +242,16 @@ component "facter" do |pkg, settings, platform|
     pkg.install_file "../run_facter_interactive.bat", "#{settings[:link_bindir]}/run_facter_interactive.bat"
   end
   pkg.link "#{settings[:bindir]}/facter", "#{settings[:link_bindir]}/facter" unless platform.is_windows?
+
   if platform.is_windows?
+    pkg.add_source("file://resources/files/facter.conf")
+    pkg.install_file "../facter.conf", "#{settings[:sysconfdir]}/facter/facter.conf"
+    pkg.configfile File.join(settings[:sysconfdir], 'facter', 'facter.conf')
     pkg.directory File.join(settings[:sysconfdir], 'facter', 'facts.d')
   else
+    pkg.add_source("file://resources/files/facter.conf")
+    pkg.install_file "../facter.conf", "#{settings[:install_root]}/facter/facter.conf"
+    pkg.configfile File.join(settings[:install_root], 'facter', 'facter.conf')
     pkg.directory File.join(settings[:install_root], 'facter', 'facts.d')
   end
 end

@@ -27,8 +27,8 @@ component "runtime" do |pkg, settings, platform|
   end
 
   if platform.is_aix?
-    pkg.install_file File.join(libdir, "libstdc++.a"), "/opt/puppetlabs/puppet/lib/libstdc++.a"
-    pkg.install_file File.join(libdir, "libgcc_s.a"), "/opt/puppetlabs/puppet/lib/libgcc_s.a"
+    pkg.install_file File.join(libdir, "libstdc++.a"), "/var/tmp/puppetlabs/opt/puppet/lib/libstdc++.a"
+    pkg.install_file File.join(libdir, "libgcc_s.a"), "/var/tmp/puppetlabs/opt/puppet/lib/libgcc_s.a"
   elsif platform.is_osx?
     # Nothing to see here
   elsif platform.is_windows?

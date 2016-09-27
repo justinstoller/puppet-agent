@@ -4,10 +4,8 @@ component "hiera" do |pkg, settings, platform|
   pkg.build_requires "ruby-#{settings[:ruby_version]}"
   pkg.build_requires "rubygem-deep-merge"
 
-  pkg.replaces 'hiera', '2.0.0'
-  pkg.provides 'hiera', '2.0.0'
-
-  pkg.replaces 'pe-hiera'
+  pkg.replaces 'forage-hiera', '2.0.0'
+  pkg.provides 'forage-hiera', '2.0.0'
 
   configdir = settings[:puppet_configdir]
   flags = " --bindir=#{settings[:bindir]} \
