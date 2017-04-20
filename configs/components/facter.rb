@@ -244,14 +244,8 @@ component "facter" do |pkg, settings, platform|
   pkg.link "#{settings[:bindir]}/facter", "#{settings[:link_bindir]}/facter" unless platform.is_windows?
 
   if platform.is_windows?
-    pkg.add_source("file://resources/files/facter.conf")
-    pkg.install_file "../facter.conf", "#{settings[:sysconfdir]}/facter/facter.conf"
-    pkg.configfile File.join(settings[:sysconfdir], 'facter', 'facter.conf')
     pkg.directory File.join(settings[:sysconfdir], 'facter', 'facts.d')
   else
-    pkg.add_source("file://resources/files/facter.conf")
-    pkg.install_file "../facter.conf", "#{settings[:install_root]}/facter/facter.conf"
-    pkg.configfile File.join(settings[:install_root], 'facter', 'facter.conf')
     pkg.directory File.join(settings[:install_root], 'facter', 'facts.d')
   end
 end
