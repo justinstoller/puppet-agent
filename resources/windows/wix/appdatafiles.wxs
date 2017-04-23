@@ -38,7 +38,7 @@
       <Component
         Id="PuppetConfUnconditionalSettings"
         Permanent="no"
-        Guid="B9179A60-483F-4F32-8E3F-AD632B0DEBB4"
+        Guid="93D70C16-0803-47B4-AE57-E7D61FB4D720"
         Directory="PuppetConfDir">
         <CreateFolder />
         <IniFile
@@ -63,7 +63,7 @@
       <Component
         Id="PuppetConfWithAgentEnvironment"
         Permanent="no"
-        Guid="EC56FB39-A176-42BA-BB1C-10C8DE76AE67"
+        Guid="1EDDF719-7B40-44FA-9E11-5EC890494AAE"
         Directory="PuppetConfDir">
         <Condition>PUPPET_AGENT_ENVIRONMENT</Condition>
         <CreateFolder />
@@ -80,7 +80,7 @@
       <Component
         Id="PuppetConfWithCertname"
         Permanent="yes"
-        Guid="5D1813E1-0AEB-4965-B504-354D7F10DCEA"
+        Guid="A33931B0-C092-4AF5-B7FC-A2C96FBC3545"
         Directory="PuppetConfDir">
         <Condition>PUPPET_AGENT_CERTNAME</Condition>
         <CreateFolder />
@@ -97,7 +97,7 @@
       <Component
         Id="PuppetConfWithCaServer"
         Permanent="no"
-        Guid="CE676CF1-2E12-4CDC-B87F-D4BC4E71FF85"
+        Guid="FAB66DD6-4EF1-4445-9C6D-503CB0016051"
         Directory="PuppetConfDir">
         <Condition>PUPPET_CA_SERVER</Condition>
         <CreateFolder />
@@ -113,14 +113,14 @@
       <Component
         Id="PuppetVarDir"
         Permanent="no"
-        Guid="B95A17F3-CF5E-4EC7-859E-F10C0965645F"
+        Guid="FFAAF60C-E284-4532-8030-890E64113ABF"
         Directory="PuppetVarDir">
         <CreateFolder />
       </Component>
       <Component
         Id="PuppetInstallerFacts"
         Permanent="no"
-        Guid="4E7C234B-2837-4459-A20E-9503A922FCB9"
+        Guid="396D1D2A-BF6F-4BF2-8606-9B7ADDF9F99E"
         Directory="FactsDotD">
         <CreateFolder>
           <Permission GenericAll="yes" User="Administrators" />
@@ -130,49 +130,49 @@
       <Component
         Id="CodeDir"
         Permanent="no"
-        Guid="0D29EB1B-604D-4FE1-A75C-F18CC230BEED"
+        Guid="FF95F6EE-0BED-485F-A14D-444BB4677363"
         Directory="CodeDir">
         <CreateFolder />
       </Component>
       <Component
         Id="HieraDataDir"
         Permanent="no"
-        Guid="2438387C-BEA5-47C1-8B43-46FE30E14BEA"
+        Guid="4056DE18-5040-4E5D-815E-1FFBA7E4A814"
         Directory="HieraDataDir">
         <CreateFolder />
       </Component>
       <Component
         Id="CodeModulesDir"
         Permanent="no"
-        Guid="ae4a85a4-a305-4c95-b254-c2f06c586482"
+        Guid="CF35C13E-6F0F-4843-BEE6-0DF7DD49A4C2"
         Directory="CodeModulesDir">
         <CreateFolder />
       </Component>
       <Component
         Id="EnvironmentsDir"
         Permanent="no"
-        Guid="6a6a390a-8783-40b6-b49d-9e2b368e069d"
+        Guid="D403D838-F0DA-40D2-8751-88F7A01730A5"
         Directory="EnvironmentsDir">
         <CreateFolder />
       </Component>
       <Component
         Id="ProductionDir"
         Permanent="no"
-        Guid="b902efcd-756e-4340-8f13-5a79d46b93c7"
+        Guid="B9A29CFB-240A-4B02-B53D-2980CB99D344"
         Directory="ProductionDir">
         <CreateFolder />
       </Component>
       <Component
         Id="ManifestsDir"
         Permanent="no"
-        Guid="5484fadf-6d5e-4053-83fc-ea68918d6f2e"
+        Guid="D6046F6F-2545-4E37-ADDD-43A522215BC9"
         Directory="ManifestsDir">
         <CreateFolder />
       </Component>
       <Component
         Id="ModulesDir"
         Permanent="no"
-        Guid="cbe9cc8d-3a38-4c4c-9f16-39e42093481a"
+        Guid="27289A72-7152-4B6E-9C1C-54957C237AAE"
         Directory="ModulesDir">
         <CreateFolder />
       </Component>
